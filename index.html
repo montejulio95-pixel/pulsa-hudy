@@ -3,36 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <title>Pencatatan Penjualan Pulsa</title>
-  <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-  import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBEfWgLt4Dx6BT4H4_uSKoeZ5wSMQbOVo",
-    authDomain: "pulsa-hudy.firebaseapp.com",
-    databaseURL: "https://pulsa-hudy-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "pulsa-hudy",
-    storageBucket: "pulsa-hudy.firebasestorage.app",
-    messagingSenderId: "1016562976678",
-    appId: "1:1016562976678:web:6eca3d03ef8dae3697167",
-    measurementId: "G-RH6Z7CDSEM"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  const transaksiRef = ref(db, 'transaksi');
-
-  window.pushTransaksi = (data) => push(transaksiRef, data);
-  window.removeTransaksi = (key) => remove(ref(db, 'transaksi/' + key));
-  window.updateTransaksi = (key, data) => update(ref(db, 'transaksi/' + key), data);
-
-  onValue(transaksiRef, (snapshot) => {
-    const data = snapshot.val();
-    window.transaksi = data ? Object.entries(data).map(([key, val]) => ({ key, ...val })) : [];
-    tampilkanTransaksi();
-  });
-</script>
   <style>
+    .foto-ayu {
+  width: 120px;
+  border-radius: 50%;
+  display: block;
+  margin: 15px auto;
+}
     :root{--grad-1:#0072ff;--grad-2:#00c6ff;}
     body{margin:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
          background:linear-gradient(135deg,var(--grad-1),var(--grad-2));
@@ -61,9 +38,7 @@
 
 <!-- LOGIN -->
 <section id="loginPage" class="card">
-  <!-- GANTI src Base64 di bawah dengan Base64 foto pribadi -->
-  <img src="https://montejulio95-pixel.github.io/pulsa-hudy/avatar.jpg" alt="Foto Ayu Bingung" width="120"
-       style="display:block;margin:0 auto 15px;border-radius:50%;">
+  <img src="AyuBingung.png" alt="Foto Ayu Bingung" class="foto-ayu">
   <h2>Login</h2>
   <form id="formLogin">
     <label>Username</label>
@@ -74,13 +49,11 @@
   </form>
 </section>
 
-<!-- APP -->
+<!-- INPUT TRANSAKSI -->
 <section id="appPage" style="display:none; width:100%; max-width:800px;">
   <button id="btnLogout" style="position:absolute; top:10px; right:10px; background:#fff; color:var(--grad-1); border:none; border-radius:4px; padding:6px 12px; cursor:pointer;">Logout</button>
-  <img src="https://montejulio95-pixel.github.io/pulsa-hudy/avatar.jpg" alt="Foto Ayu Bingung" width="120"
-       style="display:block;margin:0 auto 15px;border-radius:50%;">
   <h1>Pencatatan Penjualan Pulsa Bulan Agustus</h1>
-
+<img src="AyuBingung.png" alt="Foto Ayu Bingung" class="foto-ayu">
   <form id="formTransaksi">
     <label>Tanggal:</label><br>
     <input type="date" id="tanggal" required><br><br>
@@ -89,34 +62,35 @@
     <select id="jenis" required>
       <option value="Pulsa HP">Pulsa HP</option>
       <option value="Pulsa Listrik">Pulsa Listrik</option>
+      <option value="Paket Data (QRIS)">Paket Data (QRIS)</option>
     </select><br><br>
 
     <label>Nominal:</label><br>
     <select id="nominal" required>
-      <option value="5000">5.000</option>
-      <option value="10000">10.000</option>
-      <option value="15000">15.000</option>
-      <option value="20000">20.000</option>
-      <option value="25000">25.000</option>
-      <option value="30000">30.000</option>
-      <option value="35000">35.000</option>
-      <option value="40000">40.000</option>
-      <option value="45000">45.000</option>
-      <option value="50000">50.000</option>
-      <option value="55000">55.000</option>
-      <option value="60000">60.000</option>
-      <option value="65000">65.000</option>
-      <option value="70000">70.000</option>
-      <option value="75000">75.000</option>
-      <option value="80000">80.000</option>
-      <option value="85000">85.000</option>
-      <option value="90000">90.000</option>
-      <option value="95000">95.000</option>
-      <option value="100000">100.000</option>
+     <option value="5000">5.000</option>
+<option value="10000">10.000</option>
+<option value="15000">15.000</option>
+<option value="20000">20.000</option>
+<option value="25000">25.000</option>
+<option value="30000">30.000</option>
+<option value="35000">35.000</option>
+<option value="40000">40.000</option>
+<option value="45000">45.000</option>
+<option value="50000">50.000</option>
+<option value="55000">55.000</option>
+<option value="60000">60.000</option>
+<option value="65000">65.000</option>
+<option value="70000">70.000</option>
+<option value="75000">75.000</option>
+<option value="80000">80.000</option>
+<option value="85000">85.000</option>
+<option value="90000">90.000</option>
+<option value="95000">95.000</option>
+<option value="100000">100.000</option>
     </select><br><br>
 
     <label>Nama Pembeli:</label><br>
-<input type="text" id="pembeli" required placeholder="Nama Pembeli"><br><br>
+    <input type="text" id="pembeli" required placeholder="Nama Pembeli"><br><br>
 
     <label>Harga Beli:</label><br>
     <input type="text" id="beli" required oninput="formatInput(this)" placeholder="Rp 0"><br><br>
@@ -125,13 +99,25 @@
     <input type="text" id="jual" required oninput="formatInput(this)" placeholder="Rp 0"><br><br>
 
     <label>Hutang (Rp):</label><br>
-<input type="text" id="hutang" oninput="formatInput(this)" placeholder="-"><br><br>
+    <input type="text" id="hutang" oninput="formatInput(this)" placeholder="-"><br><br>
 
     <button type="submit">Simpan</button>
     <p id="notif" style="display:none; color:green;">Transaksi berhasil disimpan!</p>
   </form>
 
-  <h2>Daftar Transaksi</h2>
+  <button onclick="tampilRiwayat()" style="margin: 20px auto; display:block; background:#fff; color:var(--grad-1); border:none; border-radius:4px; padding:6px 12px; cursor:pointer;">Lihat Riwayat</button>
+</section>
+
+<!-- RIWAYAT -->
+<section id="riwayatPage" style="display:none; width:100%; max-width:900px;">
+  <div id="modalAwalContainer" style="padding: 20px;">
+  <label for="modalAwal">Modal Awal: </label>
+  <input type="text" id="modalAwal" oninput="formatInput(this)" placeholder="Rp 0" style="padding:6px;" />
+  <button onclick="simpanModalAwal()">Simpan</button>
+  <p>Sisa Modal: <strong id="sisaModal">Rp 0</strong></p>
+</div>
+  <button onclick="kembaliKeApp()" style="position:absolute; top:10px; left:10px; background:#fff; color:var(--grad-1); border:none; border-radius:4px; padding:6px 12px; cursor:pointer;">Kembali</button>
+  <h1>Riwayat Transaksi</h1>
   <table id="tabelTransaksi" border="1" cellpadding="5">
     <thead>
       <tr>
@@ -149,48 +135,31 @@
     </thead>
     <tbody></tbody>
   </table>
-
-  <p><strong>Total Pendapatan Hari Ini:</strong> <span id="totalHarian">Rp 0</span></p>
-  <p><strong>Total Pendapatan Minggu Ini:</strong> <span id="totalMingguan">Rp 0</span></p>
-  <p><strong>Total Pendapatan Bulan Ini:</strong> <span id="totalBulanan">Rp 0</span></p>
-
-  <p><strong>Total Penjualan Keseluruhan:</strong> <span id="totalJual">Rp 0</span></p>
-  <p><strong>Total Keuntungan Keseluruhan:</strong> <span id="totalUntung">Rp 0</span></p>
+  <img src="AyuBingung.png" alt="Foto Ayu Bingung" class="foto-ayu">
 </section>
 
 <script>
-  /* helper */
-  function formatInput(el){
-    let num=el.value.replace(/[^\d]/g,'');
-    el.value=num?'Rp '+num.replace(/\B(?=(\d{3})+(?!\d))/g,'.'):'';
-    el.dataset.raw=num;
+  function simpanModalAwal() {
+  const modalRaw = getRawValue('modalAwal');
+  if (isNaN(modalRaw) || modalRaw <= 0) {
+    alert('Masukkan modal yang valid!');
+    return;
   }
-  function toRupiah(val){
-    return 'Rp '+(parseInt(val)||0).toLocaleString('id-ID');
-  }
-  function getRawValue(id){
-    return parseInt(document.getElementById(id).dataset.raw||0);
-  }
-  function hitungUntung(jual,beli,hutangEff){
-    return jual-beli-hutangEff;
-  }
+  localStorage.setItem('modalAwal', modalRaw);
+  hitungSisaModal();
+}
 
-  /* login */
+function hitungSisaModal() {
+  const modalAwal = parseInt(localStorage.getItem('modalAwal')) || 0;
+  const totalBeli = transaksi.reduce((acc, t) => acc + (parseInt(t.beli) || 0), 0);
+  const sisa = modalAwal - totalBeli;
+  document.getElementById('sisaModal').textContent = toRupiah(sisa);
+}
+
   const loginPage=document.getElementById('loginPage');
   const appPage=document.getElementById('appPage');
+  const riwayatPage=document.getElementById('riwayatPage');
   const formLogin=document.getElementById('formLogin');
-  formLogin.addEventListener('submit',e=>{e.preventDefault();
-
-    const u=document.getElementById('username').value.trim();
-    const p=document.getElementById('password').value.trim();
-    if(u==='Ayu Taneo' && p==='06012004'){
-      loginPage.style.display='none';
-      appPage.style.display='block';
-      tampilkanTransaksi();
-    }else alert('Username / Password salah!');
-  });
-
-  /* aplikasi utama */
   const form=document.getElementById('formTransaksi');
   const tabel=document.querySelector('#tabelTransaksi tbody');
   const totalHarianSpan=document.getElementById('totalHarian');
@@ -199,61 +168,40 @@
   const totalJualSpan=document.getElementById('totalJual');
   const totalUntungSpan=document.getElementById('totalUntung');
   const notif=document.getElementById('notif');
+  let transaksi=JSON.parse(localStorage.getItem('transaksiPulsa'))||[];
 
-  let transaksi= [];
-
+  function formatInput(el){let num=el.value.replace(/[^\d]/g,'');el.value=num?'Rp '+num.replace(/\B(?=(\d{3})+(?!\d))/g,'.'):'';el.dataset.raw=num;}
+  function toRupiah(val){return 'Rp '+(parseInt(val)||0).toLocaleString('id-ID');}
+  function getRawValue(id){return parseInt(document.getElementById(id).dataset.raw||0);}
+  function hitungUntung(jual,beli,hutangEff){return jual-beli-hutangEff;}
   function tampilkanTransaksi(){
     tabel.innerHTML='';
     let totalNominal=0,totalBeli=0,totalJualAll=0,totalUntungAll=0,totalHutang=0;
-
     transaksi.forEach((t,idx)=>{
-      const beli      =parseInt(t.beli)||0;
-      const jual      =parseInt(t.jual)||0;
-      const hutangEff =t.lunas?0:parseInt(t.hutang)||0;
-      const untung    =hitungUntung(jual,beli,hutangEff);
-
+      const beli=parseInt(t.beli)||0;
+      const jual=parseInt(t.jual)||0;
+      const hutangEff=t.lunas?0:parseInt(t.hutang)||0;
+      const untung=hitungUntung(jual,beli,hutangEff);
       const row=tabel.insertRow();
       row.innerHTML=`
         <td>${t.tanggal}</td>
         <td>${t.jenis}</td>
         <td>${toRupiah(t.nominal)}</td>
-         <td>${t.pembeli}</td>
+        <td>${t.pembeli}</td>
         <td>${toRupiah(beli)}</td>
         <td>${toRupiah(jual)}</td>
         <td>${(!t.hutang || parseInt(t.hutang)===0) ? '-' : toRupiah(t.hutang)}</td>
-        <td>
-          <button onclick="toggleLunas(${idx})"
-                  style="background:${t.lunas?'#28a745':'#dc3545'};color:#fff;border:none;border-radius:4px;padding:4px 8px;">
-            ${t.lunas?'LUNAS':'BELUM'}
-          </button>
-        </td>
+        <td><button onclick="toggleLunas(${idx})" style="background:${t.lunas?'#28a745':'#dc3545'};color:#fff;border:none;border-radius:4px;padding:4px 8px;">${t.lunas?'LUNAS':'BELUM'}</button></td>
         <td>${toRupiah(untung)}</td>
-        <td>
-  <button onclick="edit(${idx})">Edit</button>
-  <button onclick="hapus(${idx})">Hapus</button>
-</td>
-      `;
-
+        <td><button onclick="edit(${idx})">Edit</button><button onclick="hapus(${idx})">Hapus</button></td>`;
       totalNominal+=parseInt(t.nominal);
-      totalBeli   +=beli;
+      totalBeli+=beli;
       totalJualAll+=jual;
       totalUntungAll+=untung;
-      totalHutang +=t.lunas?0:parseInt(t.hutang)||0;
+      totalHutang+=t.lunas?0:parseInt(t.hutang)||0;
     });
-
-    const totalRow=tabel.insertRow();
-    totalRow.style.fontWeight='bold';
-    totalRow.innerHTML = `
-  <td colspan="3"><strong>TOTAL</strong></td>
-  <td>-</td>
-  <td>${toRupiah(totalBeli)}</td>
-  <td>${toRupiah(totalJualAll)}</td>
-  <td>${totalHutang ? toRupiah(totalHutang) : '-'}</td>
-  <td>-</td>
-  <td><strong>${toRupiah(totalUntungAll)}</strong></td>
-  <td></td>
-`;
-
+    const totalRow=tabel.insertRow();totalRow.style.fontWeight='bold';
+    totalRow.innerHTML=`<td colspan="3"><strong>TOTAL</strong></td><td>-</td><td>${toRupiah(totalBeli)}</td><td>${toRupiah(totalJualAll)}</td><td>${totalHutang ? toRupiah(totalHutang) : '-'}</td><td>-</td><td><strong>${toRupiah(totalUntungAll)}</strong></td><td></td>`;
     const today=new Date(),startWeek=new Date(today);startWeek.setDate(today.getDate()-today.getDay());
     const startMonth=new Date(today.getFullYear(),today.getMonth(),1);
     let harian=0,mingguan=0,bulanan=0;
@@ -271,94 +219,17 @@
     totalJualSpan.textContent   =toRupiah(totalJualAll);
     totalUntungSpan.textContent =toRupiah(totalUntungAll);
   }
-
-  function toggleLunas(idx){
-    transaksi[idx].lunas=!transaksi[idx].lunas;
-    tampilkanTransaksi(); // otomatis refresh semua total
-  }
-
-  function hapus(idx){
-    if(confirm('Yakin ingin menghapus transaksi ini?')){
-      transaksi.splice(idx,1);
-      tampilkanTransaksi();
-    }
-  }
-  function edit(idx) {
-  const t = transaksi[idx];
-  document.getElementById('tanggal').value = t.tanggal;
-  document.getElementById('jenis').value = t.jenis;
-  document.getElementById('nominal').value = t.nominal;
-  document.getElementById('pembeli').value = t.pembeli;
-
-  // Set harga beli
-  document.getElementById('beli').value = 'Rp ' + parseInt(t.beli).toLocaleString('id-ID');
-  document.getElementById('beli').dataset.raw = t.beli;
-
-  // Set harga jual
-  document.getElementById('jual').value = 'Rp ' + parseInt(t.jual).toLocaleString('id-ID');
-  document.getElementById('jual').dataset.raw = t.jual;
-
-  // Set hutang
-  const hutangEl = document.getElementById('hutang');
-  if (t.hutang && parseInt(t.hutang) > 0) {
-    hutangEl.value = 'Rp ' + parseInt(t.hutang).toLocaleString('id-ID');
-    hutangEl.dataset.raw = t.hutang;
-  } else {
-    hutangEl.value = '';
-    hutangEl.dataset.raw = 0;
-  }
-
-  // Hapus data lama
-  transaksi.splice(idx, 1);
-  tampilkanTransaksi();
-}
-
-  form.addEventListener('submit',e=>{
-    e.preventDefault();
-    const tanggal=document.getElementById('tanggal').value;
-    const jenis=document.getElementById('jenis').value;
-    const nominal=document.getElementById('nominal').value;
-    const pembeli = document.getElementById('pembeli').value.trim();
-    const beli=getRawValue('beli');
-    const jual=getRawValue('jual');
-    const hutangRaw = getRawValue('hutang');
-const hutang = isNaN(hutangRaw) || hutangRaw <= 0 ? 0 : hutangRaw;
-const lunas = hutang === 0;
-
-    if(!tanggal||isNaN(beli)||isNaN(jual)||isNaN(hutang)){alert('Isi semua field dengan benar!');return;}
-
-    transaksi.push({ tanggal, jenis, nominal, pembeli, beli, jual, hutang, lunas });
-    form.reset();
-    tampilkanTransaksi();
-    notif.style.display='block';
-    setTimeout(()=>notif.style.display='none',2000);
-  });
-
-  tampilkanTransaksi();
-  /* cek login saat refresh */
-if (localStorage.getItem('loggedIn') === 'true') {
-  loginPage.style.display = 'none';
-  appPage.style.display   = 'block';
-} else {
-  loginPage.style.display = 'block';
-  appPage.style.display   = 'none';
-}
-  document.getElementById('btnLogout').addEventListener('click', () => {
-  loginPage.style.display = 'block';
-appPage.style.display = 'none';
-localStorage.removeItem('loggedIn');
-});
-// Reset form login saat refresh atau logout
-window.addEventListener('load', () => {
-  document.getElementById('formLogin').reset();
-});
-
-document.getElementById('btnLogout').addEventListener('click', () => {
-  document.getElementById('formLogin').reset();
-  loginPage.style.display = 'block';
-  appPage.style.display = 'none';
-  localStorage.removeItem('loggedIn');
-});
+  function toggleLunas(idx){transaksi[idx].lunas=!transaksi[idx].lunas;localStorage.setItem('transaksiPulsa',JSON.stringify(transaksi));tampilkanTransaksi();}
+  function hapus(idx){if(confirm('Yakin ingin menghapus transaksi ini?')){transaksi.splice(idx,1);localStorage.setItem('transaksiPulsa',JSON.stringify(transaksi));tampilkanTransaksi();}}
+  function edit(idx){const t=transaksi[idx];document.getElementById('tanggal').value=t.tanggal;document.getElementById('jenis').value=t.jenis;document.getElementById('nominal').value=t.nominal;document.getElementById('pembeli').value=t.pembeli;document.getElementById('beli').value='Rp '+parseInt(t.beli).toLocaleString('id-ID');document.getElementById('beli').dataset.raw=t.beli;document.getElementById('jual').value='Rp '+parseInt(t.jual).toLocaleString('id-ID');document.getElementById('jual').dataset.raw=t.jual;const hutangEl=document.getElementById('hutang');if(t.hutang && parseInt(t.hutang)>0){hutangEl.value='Rp '+parseInt(t.hutang).toLocaleString('id-ID');hutangEl.dataset.raw=t.hutang;}else{hutangEl.value='';hutangEl.dataset.raw=0;}transaksi.splice(idx,1);localStorage.setItem('transaksiPulsa',JSON.stringify(transaksi));tampilkanTransaksi();}
+  form.addEventListener('submit',e=>{e.preventDefault();const tanggal=document.getElementById('tanggal').value;const jenis=document.getElementById('jenis').value;const nominal=document.getElementById('nominal').value;const pembeli=document.getElementById('pembeli').value.trim();const beli=getRawValue('beli');const jual=getRawValue('jual');const hutangRaw=getRawValue('hutang');const hutang=isNaN(hutangRaw)||hutangRaw<=0?0:hutangRaw;const lunas=hutang===0;if(!tanggal||isNaN(beli)||isNaN(jual)||isNaN(hutang)){alert('Isi semua field dengan benar!');return;}transaksi.push({tanggal,jenis,nominal,pembeli,beli,jual,hutang,lunas});localStorage.setItem('transaksiPulsa',JSON.stringify(transaksi));form.reset();tampilkanTransaksi();hitungSisaModal();notif.style.display='block';setTimeout(()=>notif.style.display='none',2000);});
+  formLogin.addEventListener('submit',e=>{e.preventDefault();const u=document.getElementById('username').value.trim();const p=document.getElementById('password').value.trim();if(u==='Ayu Taneo' && p==='06012004'){localStorage.setItem('loggedIn','true');loginPage.style.display='none';appPage.style.display='block';}else alert('Username / Password salah!');});
+  document.getElementById('btnLogout').addEventListener('click',()=>{document.getElementById('formLogin').reset();loginPage.style.display='block';appPage.style.display='none';riwayatPage.style.display='none';localStorage.removeItem('loggedIn');});
+  window.addEventListener('load',()=>{document.getElementById('formLogin').reset();hitungSisaModal();document.getElementById('modalAwal').value =toRupiah(localStorage.getItem('modalAwal') || 0);});
+  function tampilRiwayat(){appPage.style.display='none';riwayatPage.style.display='block';tampilkanTransaksi();}
+  function kembaliKeApp(){riwayatPage.style.display='none';appPage.style.display='block';}
+  if(localStorage.getItem('loggedIn')==='true'){loginPage.style.display='none';appPage.style.display='block';}else{loginPage.style.display='block';}
 </script>
+
 </body>
 </html>
