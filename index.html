@@ -4,232 +4,742 @@
   <meta charset="UTF-8">
   <title>Pencatatan Penjualan Pulsa</title>
   <style>
-    .foto-ayu {
-  width: 120px;
-  border-radius: 50%;
-  display: block;
-  margin: 15px auto;
+    :root {
+      --grad-1:#054513;
+      --grad-2:#031317;
+    }
+
+    body {
+      margin:0;
+      font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+      background:linear-gradient(135deg,var(--grad-1),var(--grad-2));
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      color:#fff;
+      padding:20px;
+      background-attachment:fixed;
+      background-size:200% 200%;
+      /* makin pelan */
+      animation:bg-move 60s ease-in-out infinite alternate;
+    }
+
+    @keyframes bg-move{
+      0%   {background-position:0% 0%;}
+      50%  {background-position:50% 80%;}
+      100% {background-position:100% 0%;}
+    }
+
+    .card, #appPage, #riwayatPage {
+      background:rgba(255,255,255,.12);
+      backdrop-filter:blur(10px);
+      border-radius:14px;
+      box-shadow:0 4px 15px rgba(0,0,0,.3);
+      padding:30px 40px;
+      width:100%;
+      max-width:1000px;
+      color:#fff;
+    }
+
+    #loginPage{
+      max-width:420px;
+      padding:26px 30px;
+      position:relative;
+      opacity:0;
+      transform:translateY(40px) scale(.95);
+      /* makin pelan */
+      animation:login-enter 2.2s cubic-bezier(.23,1.15,.32,1) .25s forwards;
+      overflow:hidden;
+    }
+
+    h1,h2{
+      text-align:center;
+      margin-top:0;
+    }
+
+    label{
+      display:block;
+      margin-bottom:5px;
+      font-weight:600;
+    }
+
+    input,select{
+      width:100%;
+      padding:10px;
+      margin-bottom:10px;
+      border:none;
+      border-radius:6px;
+      outline:none;
+      font-size:1rem;
+    }
+
+    button{
+      border:none;
+      border-radius:6px;
+      padding:8px 14px;
+      cursor:pointer;
+      font-weight:600;
+      transition:.2s;
+    }
+
+    button:hover{
+      transform:scale(1.05);
+    }
+
+    #btnLogout{
+      position:absolute;
+      top:20px;
+      right:20px;
+    }
+
+    .foto-app {
+  display:block;
+  margin:8px auto 16px;
+  width:130px;
+  height:130px;
+  border-radius:50%;
+
+  /* yang penting ini diubah: */
+  object-fit:contain;         /* dulu: cover */
+  background-color:rgba(0,0,0,0.25); /* warna belakang di dalam lingkaran */
+
+  border:2px solid rgba(255,255,255,0.7);
 }
-    :root{--grad-1:#0072ff;--grad-2:#00c6ff;}
-    body{margin:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-         background:linear-gradient(135deg,var(--grad-1),var(--grad-2));
-         min-height:100vh;color:#fff;display:flex;justify-content:center;
-         align-items:center;padding:20px;}
-    .card{background:rgba(255,255,255,.15);backdrop-filter:blur(8px);
-          padding:30px 40px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.2);
-          width:100%;max-width:400px;}
-    .card h2{text-align:center;margin-bottom:20px;}
-    label{display:block;margin-bottom:5px;font-weight:600;}
-    input[type=text],input[type=password],input[type=date],select{width:100%;padding:10px;border:none;
-                                                                  border-radius:6px;outline:none;font-size:1rem;}
-    button[type=submit]{width:100%;padding:10px;background:#fff;color:var(--grad-1);
-                        border:none;border-radius:6px;font-size:1rem;font-weight:700;cursor:pointer;}
-    table{width:100%;border-collapse:collapse;margin-top:20px;
-          background:rgba(255,255,255,.15);border-radius:12px;overflow:hidden;}
-    th,td{padding:10px 12px;text-align:center;}
-    thead{background:rgba(255,255,255,.25);}
-    button{background:transparent;color:#fff;border:1px solid #fff;
-           border-radius:4px;padding:4px 8px;cursor:pointer;}
-    button:hover{background:#fff;color:var(--grad-1);}
-    h1{text-align:center;margin-top:0;}
+
+    #loginPage::before{
+      content:"";
+      position:absolute;
+      width:260px;
+      height:260px;
+      border-radius:50%;
+      background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.35),transparent 65%);
+      top:-40px;
+      right:-60px;
+      opacity:0;
+      /* makin pelan */
+      animation:login-glow 3s ease-out .6s forwards;
+      pointer-events:none;
+    }
+
+    @keyframes login-enter{
+      0%{
+        opacity:0;
+        transform:translateY(40px) scale(.9);
+      }
+      60%{
+        opacity:1;
+        transform:translateY(-4px) scale(1.02);
+      }
+      100%{
+        opacity:1;
+        transform:translateY(0) scale(1);
+      }
+    }
+
+    @keyframes login-glow{
+      0%{
+        opacity:0;
+        transform:scale(.7);
+      }
+      100%{
+        opacity:1;
+        transform:scale(1);
+      }
+    }
+
+    #loginPage h2{
+      opacity:0;
+      transform:translateY(-10px);
+      letter-spacing:.5px;
+      /* makin pelan */
+      animation:login-title 1.9s ease-out .6s forwards;
+    }
+
+    @keyframes login-title{
+      from{opacity:0;transform:translateY(-10px);}
+      to{opacity:1;transform:translateY(0);}
+    }
+
+    #loginPage form{
+      opacity:0;
+      transform:translateY(10px);
+      /* makin pelan */
+      animation:login-form 2.1s ease-out .8s forwards;
+    }
+
+    @keyframes login-form{
+      from{opacity:0;transform:translateY(10px);}
+      to{opacity:1;transform:translateY(0);}
+    }
+
+    #loginPage button[type="submit"]{
+      position:relative;
+      overflow:hidden;
+    }
+    #loginPage button[type="submit"]::after{
+      content:"";
+      position:absolute;
+      top:0;
+      left:-40%;
+      width:40%;
+      height:100%;
+      background:linear-gradient(120deg,rgba(255,255,255,.7),transparent);
+      transform:skewX(-20deg);
+      opacity:0;
+      /* makin pelan */
+      animation:login-shine 5.5s ease-in-out 1.4s infinite;
+    }
+    @keyframes login-shine{
+      0%{opacity:0;transform:translateX(-120%) skewX(-20deg);}
+      35%{opacity:1;transform:translateX(180%) skewX(-20deg);}
+      100%{opacity:0;transform:translateX(200%) skewX(-20deg);}
+    }
+
+    @keyframes page-enter{
+      from{
+        opacity:0;
+        transform:translateY(18px);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:25px;
+      background:rgba(255,255,255,.08);
+      border:2px solid #fff;
+      border-radius:10px;
+      overflow:hidden;
+    }
+
+    th,td{
+      padding:10px 8px;
+      text-align:center;
+      border:2px solid #fff;
+      font-size:0.95rem;
+    }
+
+    thead{
+      background:rgba(255,255,255,.25);
+      font-weight:600;
+      color:#fff;
+    }
+
+    tbody tr:nth-child(even){
+      background:rgba(255,255,255,0.05);
+    }
+
+    tbody tr:hover{
+      background:rgba(255,255,255,0.15);
+      transition:0.2s;
+    }
+
+    .btn-status{
+      padding:6px 10px;
+      border:none;
+      border-radius:4px;
+      color:#fff;
+      font-weight:600;
+      cursor:pointer;
+    }
+
+    .btn-lunas{background:#28a745;}
+    .btn-belum{background:#dc3545;}
+
+    .aksi-btn{
+      display:flex;
+      justify-content:center;
+      gap:6px;
+    }
+
+    .btn-edit{background:#ffc107;color:#000;}
+    .btn-hapus{background:#ff4d4d;color:#fff;}
+
+    .grand-total{
+      background:rgba(0,198,255,0.25);
+      font-weight:bold;
+      border-top:3px solid #fff;
+    }
+
+    #pagination{
+      text-align:center;
+      margin-top:15px;
+    }
+
+    #pagination button{
+      border-radius:20px;
+      border:2px solid #fff;
+      margin:3px;
+      padding:6px 12px;
+      background:transparent;
+      color:#fff;
+      font-weight:bold;
+    }
+
+    #pagination button.active{
+      background:#fff;
+      color:var(--grad-1);
+    }
   </style>
 </head>
 <body>
-
-<!-- LOGIN -->
 <section id="loginPage" class="card">
-  <img src="AyuBingung.png" alt="Foto Ayu Bingung" class="foto-ayu">
   <h2>Login</h2>
   <form id="formLogin">
     <label>Username</label>
-    <input type="text" id="username" required><br><br>
+    <input type="text" id="username" required>
     <label>Password</label>
-    <input type="password" id="password" required><br><br>
-    <button type="submit">Masuk</button>
+    <input type="password" id="password" required>
+    <button type="submit" style="width:100%;background:#fff;color:var(--grad-1);">
+      Masuk
+    </button>
   </form>
 </section>
 
-<!-- INPUT TRANSAKSI -->
-<section id="appPage" style="display:none; width:100%; max-width:800px;">
-  <button id="btnLogout" style="position:absolute; top:10px; right:10px; background:#fff; color:var(--grad-1); border:none; border-radius:4px; padding:6px 12px; cursor:pointer;">Logout</button>
-  <h1>Pencatatan Penjualan Pulsa Bulan Agustus</h1>
-<img src="AyuBingung.png" alt="Foto Ayu Bingung" class="foto-ayu">
-  <form id="formTransaksi">
-    <label>Tanggal:</label><br>
-    <input type="date" id="tanggal" required><br><br>
-
-    <label>Jenis:</label><br>
+<section id="appPage" style="display:none;position:relative;">
+  <button id="btnLogout" style="background:#fff;color:var(--grad-1);">Logout</button>
+  <h1>Pencatatan Penjualan Pulsa</h1>
+ <form id="formTransaksi">
+    <label>Tanggal</label>
+    <input type="date" id="tanggal" required>
+    <label>Nama Pembeli</label>
+    <input type="text" id="pembeli" required placeholder="Nama Pembeli">
+    <label>Jenis Transaksi</label>
     <select id="jenis" required>
       <option value="Pulsa HP">Pulsa HP</option>
       <option value="Pulsa Listrik">Pulsa Listrik</option>
-      <option value="Paket Data (QRIS)">Paket Data (QRIS)</option>
-    </select><br><br>
-
-    <label>Nominal:</label><br>
-    <select id="nominal" required>
-     <option value="5000">5.000</option>
-<option value="10000">10.000</option>
-<option value="15000">15.000</option>
-<option value="20000">20.000</option>
-<option value="25000">25.000</option>
-<option value="30000">30.000</option>
-<option value="35000">35.000</option>
-<option value="40000">40.000</option>
-<option value="45000">45.000</option>
-<option value="50000">50.000</option>
-<option value="55000">55.000</option>
-<option value="60000">60.000</option>
-<option value="65000">65.000</option>
-<option value="70000">70.000</option>
-<option value="75000">75.000</option>
-<option value="80000">80.000</option>
-<option value="85000">85.000</option>
-<option value="90000">90.000</option>
-<option value="95000">95.000</option>
-<option value="100000">100.000</option>
-    </select><br><br>
-
-    <label>Nama Pembeli:</label><br>
-    <input type="text" id="pembeli" required placeholder="Nama Pembeli"><br><br>
-
-    <label>Harga Beli:</label><br>
-    <input type="text" id="beli" required oninput="formatInput(this)" placeholder="Rp 0"><br><br>
-
-    <label>Harga Jual:</label><br>
-    <input type="text" id="jual" required oninput="formatInput(this)" placeholder="Rp 0"><br><br>
-
-    <label>Hutang (Rp):</label><br>
-    <input type="text" id="hutang" oninput="formatInput(this)" placeholder="-"><br><br>
-
-    <button type="submit">Simpan</button>
-    <p id="notif" style="display:none; color:green;">Transaksi berhasil disimpan!</p>
+      <option value="Paket Data">Paket Data</option>
+      <option value="Top Up E-Wallet">Top Up E-Wallet</option>
+    </select>
+    <label>Provider</label>
+    <select id="provider" required></select>
+    <label>Nominal</label>
+    <select id="nominal" required></select>
+    <label>Harga Beli (Rp)</label>
+    <input type="text" id="beli" required oninput="formatInput(this)" placeholder="Rp 0">
+    <label>Harga Jual (Rp)</label>
+    <input type="text" id="jual" required oninput="formatInput(this)" placeholder="Rp 0">
+    <label>Hutang (Rp)</label>
+    <input type="text" id="hutang" oninput="formatInput(this)" placeholder="-">
+    <button type="submit" style="width:100%;background:#fff;color:var(--grad-1);">
+      Simpan
+    </button>
   </form>
-
-  <button onclick="tampilRiwayat()" style="margin: 20px auto; display:block; background:#fff; color:var(--grad-1); border:none; border-radius:4px; padding:6px 12px; cursor:pointer;">Lihat Riwayat</button>
+  <button onclick="tampilRiwayat()" style="margin:15px auto;display:block;background:#fff;color:var(--grad-1);">
+    Lihat Riwayat
+  </button>
 </section>
 
-<!-- RIWAYAT -->
-<section id="riwayatPage" style="display:none; width:100%; max-width:900px;">
-  <div id="modalAwalContainer" style="padding: 20px;">
-  <label for="modalAwal">Modal Awal: </label>
-  <input type="text" id="modalAwal" oninput="formatInput(this)" placeholder="Rp 0" style="padding:6px;" />
-  <button onclick="simpanModalAwal()">Simpan</button>
-  <p>Sisa Modal: <strong id="sisaModal">Rp 0</strong></p>
-</div>
-  <button onclick="kembaliKeApp()" style="position:absolute; top:10px; left:10px; background:#fff; color:var(--grad-1); border:none; border-radius:4px; padding:6px 12px; cursor:pointer;">Kembali</button>
-  <h1>Riwayat Transaksi</h1>
-  <table id="tabelTransaksi" border="1" cellpadding="5">
-    <thead>
-      <tr>
-        <th>Tanggal</th>
-        <th>Jenis</th>
-        <th>Nominal</th>
-        <th>Nama Pembeli</th>
-        <th>Harga Beli</th>
-        <th>Harga Jual</th>
-        <th>Hutang</th>
-        <th>Status</th>
-        <th>Keuntungan</th>
-        <th>Aksi</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-  <img src="AyuBingung.png" alt="Foto Ayu Bingung" class="foto-ayu">
+<section id="riwayatPage" style="display:none;position:relative;">
+  <button onclick="kembaliKeApp()" style="position:absolute;top:20px;left:20px;background:#fff;color:var(--grad-1);">
+    Kembali
+  </button>
+  <div style="padding-top:60px;">
+    <h1>Riwayat Transaksi</h1>
+    <div style="margin-bottom:15px;text-align:center;">
+      <label>Modal Awal per Halaman:</label>
+      <input
+        type="text"
+        id="modalAwal"
+        inputmode="numeric"
+        placeholder="Rp 0"
+        style="width:200px;"
+        data-raw="0"
+        oninput="formatInput(this)">
+      <button onclick="simpanModalAwal()">Simpan</button>
+      <p style="margin-top:8px;">
+        Modal Halaman Ini: <strong id="modalHalaman">Rp 0</strong>
+      </p>
+      <p>
+        Sisa Modal Halaman Ini: <strong id="sisaModal">Rp 0</strong>
+      </p>
+    </div>
+    <table id="tabelTransaksi">
+      <thead>
+        <tr>
+          <th>Tanggal</th>
+          <th>Pembeli</th>
+          <th>Jenis</th>
+          <th>Provider</th>
+          <th>Nominal</th>
+          <th>Harga Beli</th>
+          <th>Harga Jual</th>
+          <th>Hutang</th>
+          <th>Status</th>
+          <th>Keuntungan</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div id="pagination"></div>
+  </div>
 </section>
 
 <script>
-  function simpanModalAwal() {
-  const modalRaw = getRawValue('modalAwal');
-  if (isNaN(modalRaw) || modalRaw <= 0) {
-    alert('Masukkan modal yang valid!');
+function formatInput(el){
+  let raw = el.value.replace(/[^\d]/g,'');
+  if(raw === '') raw = '0';
+  el.dataset.raw = raw;
+  el.value = 'Rp ' + parseInt(raw).toLocaleString('id-ID');
+}
+
+function getRaw(id){
+  const el = document.getElementById(id);
+  if(!el || !el.dataset.raw) return 0;
+  return parseInt(el.dataset.raw) || 0;
+}
+
+function getBaseModal(){
+  let m = parseInt(localStorage.getItem('modalAwal')) || 0;
+  if(m <= 0) m = 500000;
+  return m;
+}
+
+function simpanModalAwal(){
+  let m = getRaw('modalAwal');
+  if(m <= 0){
+    alert('Masukkan modal awal per halaman yang valid!');
     return;
   }
-  localStorage.setItem('modalAwal', modalRaw);
-  hitungSisaModal();
+  localStorage.setItem('modalAwal', m);
+  renderPage(1);
 }
 
-function hitungSisaModal() {
-  const modalAwal = parseInt(localStorage.getItem('modalAwal')) || 0;
-  const totalBeli = transaksi.reduce((acc, t) => acc + (parseInt(t.beli) || 0), 0);
-  const sisa = modalAwal - totalBeli;
-  document.getElementById('sisaModal').textContent = toRupiah(sisa);
+function formatTanggalIndo(iso){
+  if(!iso) return '-';
+  const [y,m,d] = iso.split('-');
+  return `${d}-${m}-${y}`;
 }
 
-  const loginPage=document.getElementById('loginPage');
-  const appPage=document.getElementById('appPage');
-  const riwayatPage=document.getElementById('riwayatPage');
-  const formLogin=document.getElementById('formLogin');
-  const form=document.getElementById('formTransaksi');
-  const tabel=document.querySelector('#tabelTransaksi tbody');
-  const totalHarianSpan=document.getElementById('totalHarian');
-  const totalMingguanSpan=document.getElementById('totalMingguan');
-  const totalBulananSpan=document.getElementById('totalBulanan');
-  const totalJualSpan=document.getElementById('totalJual');
-  const totalUntungSpan=document.getElementById('totalUntung');
-  const notif=document.getElementById('notif');
-  let transaksi=JSON.parse(localStorage.getItem('transaksiPulsa'))||[];
+const formLogin   = document.getElementById('formLogin');
+const loginPage   = document.getElementById('loginPage');
+const appPage     = document.getElementById('appPage');
+const riwayatPage = document.getElementById('riwayatPage');
+const tabel       = document.querySelector('#tabelTransaksi tbody');
 
-  function formatInput(el){let num=el.value.replace(/[^\d]/g,'');el.value=num?'Rp '+num.replace(/\B(?=(\d{3})+(?!\d))/g,'.'):'';el.dataset.raw=num;}
-  function toRupiah(val){return 'Rp '+(parseInt(val)||0).toLocaleString('id-ID');}
-  function getRawValue(id){return parseInt(document.getElementById(id).dataset.raw||0);}
-  function hitungUntung(jual,beli,hutangEff){return jual-beli-hutangEff;}
-  function tampilkanTransaksi(){
-    tabel.innerHTML='';
-    let totalNominal=0,totalBeli=0,totalJualAll=0,totalUntungAll=0,totalHutang=0;
-    transaksi.forEach((t,idx)=>{
-      const beli=parseInt(t.beli)||0;
-      const jual=parseInt(t.jual)||0;
-      const hutangEff=t.lunas?0:parseInt(t.hutang)||0;
-      const untung=hitungUntung(jual,beli,hutangEff);
-      const row=tabel.insertRow();
-      row.innerHTML=`
-        <td>${t.tanggal}</td>
-        <td>${t.jenis}</td>
-        <td>${toRupiah(t.nominal)}</td>
-        <td>${t.pembeli}</td>
-        <td>${toRupiah(beli)}</td>
-        <td>${toRupiah(jual)}</td>
-        <td>${(!t.hutang || parseInt(t.hutang)===0) ? '-' : toRupiah(t.hutang)}</td>
-        <td><button onclick="toggleLunas(${idx})" style="background:${t.lunas?'#28a745':'#dc3545'};color:#fff;border:none;border-radius:4px;padding:4px 8px;">${t.lunas?'LUNAS':'BELUM'}</button></td>
-        <td>${toRupiah(untung)}</td>
-        <td><button onclick="edit(${idx})">Edit</button><button onclick="hapus(${idx})">Hapus</button></td>`;
-      totalNominal+=parseInt(t.nominal);
-      totalBeli+=beli;
-      totalJualAll+=jual;
-      totalUntungAll+=untung;
-      totalHutang+=t.lunas?0:parseInt(t.hutang)||0;
-    });
-    const totalRow=tabel.insertRow();totalRow.style.fontWeight='bold';
-    totalRow.innerHTML=`<td colspan="3"><strong>TOTAL</strong></td><td>-</td><td>${toRupiah(totalBeli)}</td><td>${toRupiah(totalJualAll)}</td><td>${totalHutang ? toRupiah(totalHutang) : '-'}</td><td>-</td><td><strong>${toRupiah(totalUntungAll)}</strong></td><td></td>`;
-    const today=new Date(),startWeek=new Date(today);startWeek.setDate(today.getDate()-today.getDay());
-    const startMonth=new Date(today.getFullYear(),today.getMonth(),1);
-    let harian=0,mingguan=0,bulanan=0;
-    transaksi.forEach(t=>{
-      const d=new Date(t.tanggal);
-      const hutangEff=t.lunas?0:parseInt(t.hutang)||0;
-      const untung=hitungUntung(parseInt(t.jual)||0,parseInt(t.beli)||0,hutangEff);
-      if(d.toDateString()===today.toDateString())harian+=untung;
-      if(d>=startWeek)mingguan+=untung;
-      if(d>=startMonth)bulanan+=untung;
-    });
-    totalHarianSpan.textContent =toRupiah(harian);
-    totalMingguanSpan.textContent=toRupiah(mingguan);
-    totalBulananSpan.textContent =toRupiah(bulanan);
-    totalJualSpan.textContent   =toRupiah(totalJualAll);
-    totalUntungSpan.textContent =toRupiah(totalUntungAll);
+let transaksi = JSON.parse(localStorage.getItem('transaksiPulsa')) || [];
+let editIndex = null;
+window.halamanAktif = 1;
+
+function toRupiah(v){
+  return 'Rp ' + (parseInt(v) || 0).toLocaleString('id-ID');
+}
+
+function animatePage(el){
+  el.style.animation = 'none';
+  void el.offsetHeight;
+  /* makin pelan */
+  el.style.animation = 'page-enter 2.1s ease-out';
+}
+
+formLogin.addEventListener('submit', e=>{
+  e.preventDefault();
+  const u = document.getElementById('username').value.trim();
+  const p = document.getElementById('password').value.trim();
+
+  if(u === 'Ayu Taneo' && p === '06012004'){
+    localStorage.setItem('loggedIn','true');
+    loginPage.style.display = 'none';
+    appPage.style.display   = 'block';
+    animatePage(appPage);
+  }else{
+    alert('Username / Password salah!');
   }
-  function toggleLunas(idx){transaksi[idx].lunas=!transaksi[idx].lunas;localStorage.setItem('transaksiPulsa',JSON.stringify(transaksi));tampilkanTransaksi();}
-  function hapus(idx){if(confirm('Yakin ingin menghapus transaksi ini?')){transaksi.splice(idx,1);localStorage.setItem('transaksiPulsa',JSON.stringify(transaksi));tampilkanTransaksi();}}
-  function edit(idx){const t=transaksi[idx];document.getElementById('tanggal').value=t.tanggal;document.getElementById('jenis').value=t.jenis;document.getElementById('nominal').value=t.nominal;document.getElementById('pembeli').value=t.pembeli;document.getElementById('beli').value='Rp '+parseInt(t.beli).toLocaleString('id-ID');document.getElementById('beli').dataset.raw=t.beli;document.getElementById('jual').value='Rp '+parseInt(t.jual).toLocaleString('id-ID');document.getElementById('jual').dataset.raw=t.jual;const hutangEl=document.getElementById('hutang');if(t.hutang && parseInt(t.hutang)>0){hutangEl.value='Rp '+parseInt(t.hutang).toLocaleString('id-ID');hutangEl.dataset.raw=t.hutang;}else{hutangEl.value='';hutangEl.dataset.raw=0;}transaksi.splice(idx,1);localStorage.setItem('transaksiPulsa',JSON.stringify(transaksi));tampilkanTransaksi();}
-  form.addEventListener('submit',e=>{e.preventDefault();const tanggal=document.getElementById('tanggal').value;const jenis=document.getElementById('jenis').value;const nominal=document.getElementById('nominal').value;const pembeli=document.getElementById('pembeli').value.trim();const beli=getRawValue('beli');const jual=getRawValue('jual');const hutangRaw=getRawValue('hutang');const hutang=isNaN(hutangRaw)||hutangRaw<=0?0:hutangRaw;const lunas=hutang===0;if(!tanggal||isNaN(beli)||isNaN(jual)||isNaN(hutang)){alert('Isi semua field dengan benar!');return;}transaksi.push({tanggal,jenis,nominal,pembeli,beli,jual,hutang,lunas});localStorage.setItem('transaksiPulsa',JSON.stringify(transaksi));form.reset();tampilkanTransaksi();hitungSisaModal();notif.style.display='block';setTimeout(()=>notif.style.display='none',2000);});
-  formLogin.addEventListener('submit',e=>{e.preventDefault();const u=document.getElementById('username').value.trim();const p=document.getElementById('password').value.trim();if(u==='Ayu Taneo' && p==='06012004'){localStorage.setItem('loggedIn','true');loginPage.style.display='none';appPage.style.display='block';}else alert('Username / Password salah!');});
-  document.getElementById('btnLogout').addEventListener('click',()=>{document.getElementById('formLogin').reset();loginPage.style.display='block';appPage.style.display='none';riwayatPage.style.display='none';localStorage.removeItem('loggedIn');});
-  window.addEventListener('load',()=>{document.getElementById('formLogin').reset();hitungSisaModal();document.getElementById('modalAwal').value =toRupiah(localStorage.getItem('modalAwal') || 0);});
-  function tampilRiwayat(){appPage.style.display='none';riwayatPage.style.display='block';tampilkanTransaksi();}
-  function kembaliKeApp(){riwayatPage.style.display='none';appPage.style.display='block';}
-  if(localStorage.getItem('loggedIn')==='true'){loginPage.style.display='none';appPage.style.display='block';}else{loginPage.style.display='block';}
-</script>
+});
 
+document.getElementById('btnLogout').onclick = ()=>{
+  formLogin.reset();
+  localStorage.removeItem('loggedIn');
+  loginPage.style.display   = 'block';
+  appPage.style.display     = 'none';
+  riwayatPage.style.display = 'none';
+};
+
+window.addEventListener('load', ()=>{
+  const base = getBaseModal();
+  const eModal = document.getElementById('modalAwal');
+  eModal.dataset.raw = base;
+  eModal.value = 'Rp ' + base.toLocaleString('id-ID');
+
+  if(localStorage.getItem('loggedIn') === 'true'){
+    loginPage.style.display = 'none';
+    appPage.style.display   = 'block';
+    animatePage(appPage);
+  }
+});
+
+const providerOptions = {
+  "Pulsa HP"        :["Telkomsel","Indosat","XL","Axis","Tri","Smartfren"],
+  "Pulsa Listrik"   :["PLN"],
+  "Paket Data"      :["Telkomsel","Indosat","XL","Axis","Tri","Smartfren"],
+  "Top Up E-Wallet" :["Dana","Shopee Pay","Gopay"]
+};
+
+function updateProvider(){
+  const jenis = document.getElementById("jenis").value;
+  const ps    = document.getElementById("provider");
+  ps.innerHTML = "";
+  (providerOptions[jenis] || []).forEach(p=>{
+    const o = document.createElement("option");
+    o.value = p;
+    o.textContent = p;
+    ps.appendChild(o);
+  });
+}
+
+document.getElementById("jenis").addEventListener("change", updateProvider);
+updateProvider();
+
+const nominalSelect = document.getElementById("nominal");
+for(let i=5000;i<=100000;i+=5000){
+  const opt = document.createElement("option");
+  opt.value = i;
+  opt.textContent = i.toLocaleString('id-ID');
+  nominalSelect.appendChild(opt);
+}
+
+document.getElementById('formTransaksi').addEventListener('submit', e=>{
+  e.preventDefault();
+
+  const d = {
+    tanggal : document.getElementById('tanggal').value,
+    jenis   : document.getElementById('jenis').value,
+    provider: document.getElementById('provider').value,
+    nominal : document.getElementById('nominal').value,
+    pembeli : document.getElementById('pembeli').value,
+    beli    : getRaw('beli'),
+    jual    : getRaw('jual'),
+    hutang  : getRaw('hutang'),
+    lunas   : getRaw('hutang') <= 0
+  };
+
+  if(editIndex !== null){
+    transaksi[editIndex] = d;
+    editIndex = null;
+  }else{
+    transaksi.push(d);
+  }
+
+  localStorage.setItem('transaksiPulsa', JSON.stringify(transaksi));
+
+  appPage.style.display     = 'none';
+  riwayatPage.style.display = 'block';
+  renderLastPage();
+  animatePage(riwayatPage);
+});
+
+function tampilRiwayat(){
+  appPage.style.display     = 'none';
+  riwayatPage.style.display = 'block';
+  renderPage(window.halamanAktif);
+  animatePage(riwayatPage);
+}
+
+function kembaliKeApp(){
+  riwayatPage.style.display = 'none';
+  appPage.style.display     = 'block';
+  animatePage(appPage);
+}
+
+function toggleLunas(i){
+  transaksi[i].lunas = !transaksi[i].lunas;
+  localStorage.setItem('transaksiPulsa', JSON.stringify(transaksi));
+  renderPage(window.halamanAktif);
+}
+
+function hapus(i){
+  if(!confirm('Yakin hapus?')) return;
+  transaksi.splice(i,1);
+  localStorage.setItem('transaksiPulsa', JSON.stringify(transaksi));
+  renderPage(window.halamanAktif);
+}
+
+function edit(i){
+  const t = transaksi[i];
+
+  appPage.style.display     = 'block';
+  riwayatPage.style.display = 'none';
+  animatePage(appPage);
+
+  ['tanggal','jenis','nominal','pembeli'].forEach(id=>{
+    document.getElementById(id).value = t[id];
+  });
+
+  updateProvider();
+  document.getElementById('provider').value = t.provider;
+
+  ['beli','jual','hutang'].forEach(id=>{
+    document.getElementById(id).value       = toRupiah(t[id]);
+    document.getElementById(id).dataset.raw = t[id];
+  });
+
+  editIndex = i;
+}
+
+function buildGroupsDenganSisa(list){
+  const base = getBaseModal();
+  const groups = [];
+  let sisaSebelum = 0;
+  let current = [];
+  let kapasitas = base + sisaSebelum;
+  let terpakai = 0;
+
+  list.forEach(t=>{
+    let b = parseInt(t.beli) || 0;
+
+    if(current.length === 0){
+      kapasitas = base + sisaSebelum;
+      terpakai  = 0;
+    }
+
+    if(terpakai + b > kapasitas && current.length > 0){
+      const sisa = kapasitas - terpakai;
+      groups.push({
+        items: current,
+        modal: kapasitas,
+        sisa : sisa
+      });
+      sisaSebelum = sisa;
+      current = [];
+      kapasitas = base + sisaSebelum;
+      terpakai = 0;
+    }
+
+    current.push(t);
+    terpakai += b;
+  });
+
+  if(current.length > 0){
+    const sisa = kapasitas - terpakai;
+    groups.push({
+      items: current,
+      modal: kapasitas,
+      sisa : sisa
+    });
+  }
+
+  return groups;
+}
+
+function renderPage(p){
+  const groups = buildGroupsDenganSisa(transaksi);
+  const totalPages = Math.max(1, groups.length || 1);
+
+  window.halamanAktif = Math.min(Math.max(1,p), totalPages);
+
+  const meta = groups[window.halamanAktif - 1] || {
+    items: [],
+    modal: getBaseModal(),
+    sisa : getBaseModal()
+  };
+
+  tabel.innerHTML = '';
+
+  let tn=0,tb=0,tj=0,th=0,tu=0;
+
+  meta.items.forEach(t=>{
+    let n = parseInt(t.nominal) || 0;
+    let b = parseInt(t.beli)    || 0;
+    let j = parseInt(t.jual)    || 0;
+    let h = t.lunas ? 0 : (parseInt(t.hutang) || 0);
+    let u = j - b;
+
+    const r = tabel.insertRow();
+    if(!t.lunas) r.style.background = 'rgba(220,53,69,0.12)';
+
+    r.innerHTML = `
+      <td>${formatTanggalIndo(t.tanggal)}</td>
+      <td>${t.pembeli}</td>
+      <td>${t.jenis}</td>
+      <td>${t.provider}</td>
+      <td>${toRupiah(n)}</td>
+      <td>${toRupiah(b)}</td>
+      <td>${toRupiah(j)}</td>
+      <td>${h ? toRupiah(h) : '-'}</td>
+      <td>
+        <button class="btn-status ${t.lunas?'btn-lunas':'btn-belum'}"
+                onclick="toggleLunas(${transaksi.indexOf(t)})">
+          ${t.lunas ? 'LUNAS' : 'BELUM'}
+        </button>
+      </td>
+      <td>${toRupiah(u)}</td>
+      <td>
+        <div class="aksi-btn">
+          <button class="btn-edit" onclick="edit(${transaksi.indexOf(t)})">Edit</button>
+          <button class="btn-hapus" onclick="hapus(${transaksi.indexOf(t)})">Hapus</button>
+        </div>
+      </td>`;
+    tn += n; tb += b; tj += j; th += h; tu += u;
+  });
+
+  const tr = tabel.insertRow();
+  tr.style.fontWeight = 'bold';
+  tr.innerHTML = `
+    <td colspan="4">TOTAL HALAMAN INI</td>
+    <td>${toRupiah(tn)}</td>
+    <td>${toRupiah(tb)}</td>
+    <td>${toRupiah(tj)}</td>
+    <td>${th ? toRupiah(th) : '-'}</td>
+    <td>-</td>
+    <td>${toRupiah(tu)}</td>
+    <td></td>`;
+
+  let gn=0,gb=0,gj=0,gh=0,gu=0;
+  transaksi.forEach(t=>{
+    let n = parseInt(t.nominal) || 0;
+    let b = parseInt(t.beli)    || 0;
+    let j = parseInt(t.jual)    || 0;
+    let h = t.lunas ? 0 : (parseInt(t.hutang) || 0);
+    let u = j - b;
+    gn += n; gb += b; gj += j; gh += h; gu += u;
+  });
+
+  const gtr = tabel.insertRow();
+  gtr.classList.add('grand-total');
+  gtr.innerHTML = `
+    <td colspan="4">TOTAL SEMUA HALAMAN</td>
+    <td>${toRupiah(gn)}</td>
+    <td>${toRupiah(gb)}</td>
+    <td>${toRupiah(gj)}</td>
+    <td>${gh ? toRupiah(gh) : '-'}</td>
+    <td>-</td>
+    <td>${toRupiah(gu)}</td>
+    <td></td>`;
+
+  buildPagination(totalPages);
+
+  document.getElementById('modalHalaman').textContent = toRupiah(meta.modal);
+  document.getElementById('sisaModal').textContent    = toRupiah(meta.sisa);
+
+  const base = getBaseModal();
+  const eModal = document.getElementById('modalAwal');
+  eModal.dataset.raw = base;
+  eModal.value = 'Rp ' + base.toLocaleString('id-ID');
+}
+
+function buildPagination(total){
+  let p = document.getElementById('pagination');
+  p.innerHTML = '';
+  for(let i=1;i<=total;i++){
+    let b = document.createElement('button');
+    b.textContent = i;
+    b.classList.toggle('active', i === window.halamanAktif);
+    b.onclick = ()=>renderPage(i);
+    p.appendChild(b);
+  }
+}
+
+function renderLastPage(){
+  const groups = buildGroupsDenganSisa(transaksi);
+  const last = Math.max(1, groups.length || 1);
+  renderPage(last);
+}
+</script>
 </body>
 </html>
