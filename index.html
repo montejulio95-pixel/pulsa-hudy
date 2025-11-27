@@ -21,7 +21,6 @@
       padding:20px;
       background-attachment:fixed;
       background-size:200% 200%;
-      /* makin pelan */
       animation:bg-move 60s ease-in-out infinite alternate;
     }
 
@@ -48,7 +47,6 @@
       position:relative;
       opacity:0;
       transform:translateY(40px) scale(.95);
-      /* makin pelan */
       animation:login-enter 2.2s cubic-bezier(.23,1.15,.32,1) .25s forwards;
       overflow:hidden;
     }
@@ -93,19 +91,17 @@
       right:20px;
     }
 
+    /* FOTO BULAT, TIDAK TERPOTONG */
     .foto-app {
-  display:block;
-  margin:8px auto 16px;
-  width:130px;
-  height:130px;
-  border-radius:50%;
-
-  /* yang penting ini diubah: */
-  object-fit:contain;         /* dulu: cover */
-  background-color:rgba(0,0,0,0.25); /* warna belakang di dalam lingkaran */
-
-  border:2px solid rgba(255,255,255,0.7);
-}
+      display:block;
+      margin:8px auto 16px;
+      width:130px;
+      height:130px;
+      border-radius:50%;
+      object-fit:contain;                /* tidak di-crop */
+      background-color:rgba(0,0,0,0.25); /* isi belakang jika ada ruang kosong */
+      border:2px solid rgba(255,255,255,0.7);
+    }
 
     #loginPage::before{
       content:"";
@@ -117,7 +113,6 @@
       top:-40px;
       right:-60px;
       opacity:0;
-      /* makin pelan */
       animation:login-glow 3s ease-out .6s forwards;
       pointer-events:none;
     }
@@ -152,7 +147,6 @@
       opacity:0;
       transform:translateY(-10px);
       letter-spacing:.5px;
-      /* makin pelan */
       animation:login-title 1.9s ease-out .6s forwards;
     }
 
@@ -164,7 +158,6 @@
     #loginPage form{
       opacity:0;
       transform:translateY(10px);
-      /* makin pelan */
       animation:login-form 2.1s ease-out .8s forwards;
     }
 
@@ -187,7 +180,6 @@
       background:linear-gradient(120deg,rgba(255,255,255,.7),transparent);
       transform:skewX(-20deg);
       opacity:0;
-      /* makin pelan */
       animation:login-shine 5.5s ease-in-out 1.4s infinite;
     }
     @keyframes login-shine{
@@ -288,9 +280,11 @@
   </style>
 </head>
 <body>
+
+<!-- LOGIN -->
 <section id="loginPage" class="card">
   <h2>Login</h2>
-  <img src="AyuBingung.png" alt="Foto" class="foto-app">
+  <img src="AyuBingung.png" alt="Foto Ayu" class="foto-app">
   <form id="formLogin">
     <label>Username</label>
     <input type="text" id="username" required>
@@ -302,15 +296,19 @@
   </form>
 </section>
 
+<!-- INPUT TRANSAKSI -->
 <section id="appPage" style="display:none;position:relative;">
   <button id="btnLogout" style="background:#fff;color:var(--grad-1);">Logout</button>
   <h1>Pencatatan Penjualan Pulsa</h1>
-  <img src="AyuBingung.png" alt="Foto" class="foto-app">
- <form id="formTransaksi">
+  <img src="AyuBingung.png" alt="Foto Ayu" class="foto-app">
+
+  <form id="formTransaksi">
     <label>Tanggal</label>
     <input type="date" id="tanggal" required>
+
     <label>Nama Pembeli</label>
     <input type="text" id="pembeli" required placeholder="Nama Pembeli">
+
     <label>Jenis Transaksi</label>
     <select id="jenis" required>
       <option value="Pulsa HP">Pulsa HP</option>
@@ -318,32 +316,42 @@
       <option value="Paket Data">Paket Data</option>
       <option value="Top Up E-Wallet">Top Up E-Wallet</option>
     </select>
+
     <label>Provider</label>
     <select id="provider" required></select>
+
     <label>Nominal</label>
     <select id="nominal" required></select>
+
     <label>Harga Beli (Rp)</label>
     <input type="text" id="beli" required oninput="formatInput(this)" placeholder="Rp 0">
+
     <label>Harga Jual (Rp)</label>
     <input type="text" id="jual" required oninput="formatInput(this)" placeholder="Rp 0">
+
     <label>Hutang (Rp)</label>
     <input type="text" id="hutang" oninput="formatInput(this)" placeholder="-">
+
     <button type="submit" style="width:100%;background:#fff;color:var(--grad-1);">
       Simpan
     </button>
   </form>
+
   <button onclick="tampilRiwayat()" style="margin:15px auto;display:block;background:#fff;color:var(--grad-1);">
     Lihat Riwayat
   </button>
 </section>
 
+<!-- RIWAYAT -->
 <section id="riwayatPage" style="display:none;position:relative;">
   <button onclick="kembaliKeApp()" style="position:absolute;top:20px;left:20px;background:#fff;color:var(--grad-1);">
     Kembali
   </button>
+
   <div style="padding-top:60px;">
     <h1>Riwayat Transaksi</h1>
-    <img src="AyuBingung.png" alt="Foto" class="foto-app">
+    <img src="AyuBingung.png" alt="Foto Ayu" class="foto-app">
+
     <div style="margin-bottom:15px;text-align:center;">
       <label>Modal Awal per Halaman:</label>
       <input
@@ -355,6 +363,7 @@
         data-raw="0"
         oninput="formatInput(this)">
       <button onclick="simpanModalAwal()">Simpan</button>
+
       <p style="margin-top:8px;">
         Modal Halaman Ini: <strong id="modalHalaman">Rp 0</strong>
       </p>
@@ -362,6 +371,7 @@
         Sisa Modal Halaman Ini: <strong id="sisaModal">Rp 0</strong>
       </p>
     </div>
+
     <table id="tabelTransaksi">
       <thead>
         <tr>
@@ -380,6 +390,7 @@
       </thead>
       <tbody></tbody>
     </table>
+
     <div id="pagination"></div>
   </div>
 </section>
@@ -437,7 +448,6 @@ function toRupiah(v){
 function animatePage(el){
   el.style.animation = 'none';
   void el.offsetHeight;
-  /* makin pelan */
   el.style.animation = 'page-enter 2.1s ease-out';
 }
 
@@ -746,4 +756,3 @@ function renderLastPage(){
 </script>
 </body>
 </html>
-
