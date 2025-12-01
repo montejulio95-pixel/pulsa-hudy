@@ -90,19 +90,7 @@
       top:20px;
       right:20px;
     }
-
-    /* FOTO BULAT */
-    .foto-app {
-      display:block;
-      margin:8px auto 16px;
-      width:130px;
-      height:130px;
-      border-radius:50%;
-      object-fit:contain;                /* supaya tidak kepotong */
-      background-color:rgba(0,0,0,0.25); /* area kosong di dalam lingkaran */
-      border:2px solid rgba(255,255,255,0.7);
-    }
-
+    
     #loginPage::before{
       content:"";
       position:absolute;
@@ -284,10 +272,6 @@
 <!-- LOGIN -->
 <section id="loginPage" class="card">
   <h2>Login</h2>
-
-  <!-- Foto di halaman login -->
-  <img src="fotoayang.png" alt="Foto" class="foto-app">
-
   <form id="formLogin">
     <label>Username</label>
     <input type="text" id="username" required>
@@ -303,10 +287,6 @@
 <section id="appPage" style="display:none;position:relative;">
   <button id="btnLogout" style="background:#fff;color:var(--grad-1);">Logout</button>
   <h1>Pencatatan Penjualan Pulsa</h1>
-
-  <!-- Foto di halaman input -->
-  <img src="fotoayang.png" alt="Foto" class="foto-app">
-
   <form id="formTransaksi">
     <label>Tanggal</label>
     <input type="date" id="tanggal" required>
@@ -355,10 +335,6 @@
 
   <div style="padding-top:60px;">
     <h1>Riwayat Transaksi</h1>
-
-    <!-- Foto di halaman riwayat -->
-    <img src="fotoayang.png" alt="Foto" class="foto-app">
-
     <div style="margin-bottom:15px;text-align:center;">
       <label>Modal Awal per Halaman:</label>
       <input
@@ -763,4 +739,5 @@ function renderLastPage(){
 </script>
 </body>
 </html>
+
 
